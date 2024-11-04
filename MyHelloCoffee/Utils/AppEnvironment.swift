@@ -20,7 +20,7 @@ enum Endpoints {
         case .placeorder:
             return "/new-order"
         case .deleteOrder(let orderId):
-            return "/orders/\(orderId)"
+            return "/v2/orders/\(orderId)"
         case .updateOrder(let orderId):
             return "/orders/\(orderId)"
         }

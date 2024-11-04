@@ -13,6 +13,16 @@ struct OrderDetailView: View {
     let orderId: Int
     @EnvironmentObject private var model: CoffeeModel
     @State private var isPresented: Bool = false
+    @Environment(\.dismiss) private var dismiss
+    
+    private func deleteOrder() async {
+        do {
+            try await model.deleteOrder(orderId)
+            dismiss()
+        } catch {
+            print(error)
+        }
+    }
     
     var body: some View {
         VStack {
@@ -30,7 +40,9 @@ struct OrderDetailView: View {
                     HStack {
                         Spacer()
                         Button("Delete Order", role: .destructive) {
-                            
+                            Task {
+                                await deleteOrder()
+                            }
                         }
                         Button("Edit Order") {
                             isPresented = true
@@ -38,7 +50,7 @@ struct OrderDetailView: View {
                         Spacer()
                     }
                 }.sheet(isPresented: $isPresented) {
-                    AddCoffeeView()
+                    AddCoffeeView(order: order)
                 }
             }
             
@@ -53,9 +65,6 @@ struct OrderDetailView_Previews: PreviewProvider {
         var config = Configuration()
         OrderDetailView(orderId: 1).environmentObject(CoffeeModel(webservice: Webservice(baseURL: config.environment.baseURL)))
     }
-//    static var previews: some View {
-//        var config = Configuration()
-//        ContentView().environmentObject(CoffeeModel(webservice: Webservice(baseURL: config.environment.baseURL)))
-//    }
+
 }
 
