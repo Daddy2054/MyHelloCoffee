@@ -14,9 +14,9 @@ enum Endpoints {
     var path: String {
         switch self {
         case .allOrders:
-            return "/orders"
+            return "/test/orders"
         case .placeorder:
-            return "/new-order"
+            return "/test/new-order"
             
         }
     }
